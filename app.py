@@ -29,7 +29,7 @@ def home():
     return render_template("index.html",items=listed_items)
 
 @app.route("/check/<int:todo_id>",methods = ['POST'])
-def reverse_check(todo_id):
+def check(todo_id):
     for item in listed_items:
         if item['id']==todo_id:
             item['checked']=not item['checked']
@@ -37,7 +37,7 @@ def reverse_check(todo_id):
     return redirect(url_for('home'))    
 
 @app.route("/delete/<int:todo_id>",methods = ['POST'])
-def delete_item(todo_id):
+def delete(todo_id):
     for item in listed_items:
         if item['id']==todo_id:
             listed_items.remove(item)
