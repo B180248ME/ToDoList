@@ -14,8 +14,12 @@ def home():
         sqlite.insertData((item_name,new_id,0))
 
     items_data = sqlite.readData()
-    print(items_data,"LISTEDD")
     return render_template("index.html",items=items_data)
+
+@app.route("/clear",methods = ['POST'])
+def clear():
+    sqlite.clearData()
+    return redirect(url_for('home'))  
 
 @app.route("/check/<int:todo_id>",methods = ['POST'])
 def check(todo_id):

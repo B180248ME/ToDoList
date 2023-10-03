@@ -1,3 +1,4 @@
 venv
 ToDoList.db
+ToDoList.log
 __pycache__

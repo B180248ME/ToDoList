@@ -8,10 +8,15 @@
 </head>
 <body>
     <h1>ToDo List</h1>
-    <form action="{{ url_for('home')}} " class="input-container" method="POST">
-        <input type="text" placeholder="Enter ToDo" name="todo_name" id="input-todo">
-        <button id="add-todo">+</button>
-    </form>
+    <div class="main-container">
+        <form action="{{ url_for('home')}} " class="input-container" method="POST">
+            <input type="text" placeholder="Enter ToDo" name="todo_name" id="input-todo">
+            <button id="add-todo">+</button>
+        </form>
+        <form action="{{ url_for('clear')}} " class="clear-container" method="POST">
+            <button id="cleardb">ClearDB</button>
+        </form>
+    </div>
     <h2>ToDos</h2>
     <div class="todo-container">
         {% for item in items %}
