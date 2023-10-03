@@ -1,46 +1,38 @@
 from flask import Flask, render_template,url_for,request,redirect
 import random
+from sqllite import SQLITE_UTILS
 app = Flask(__name__)
 
-listed_items = [
-    {
-        'name':'first-item',
-        'id':1,
-        'checked':False
-    },
-    {
-        'name':'second-item',
-        'id':2,
-        'checked':True
-    }
-]
+sqlite = SQLITE_UTILS()
+items_data = sqlite.readData()
 @app.route("/",methods = ['GET','POST'])
 @app.route("/home",methods = ['GET','POST'])
 def home():
     if request.method == 'POST':
         item_name= request.form['todo_name']
         new_id = random.randint(1,1000)
-        new_item = {
-            'name':item_name,
-            'id':new_id,
-            'checked':False
-        }
-        listed_items.append(new_item)
-    return render_template("index.html",items=listed_items)
+        sqlite.insertData((item_name,new_id,0))
+
+    items_data = sqlite.readData()
+    print(items_data,"LISTEDD")
+    return render_template("index.html",items=items_data)
 
 @app.route("/check/<int:todo_id>",methods = ['POST'])
 def check(todo_id):
-    for item in listed_items:
-        if item['id']==todo_id:
-            item['checked']=not item['checked']
+    items_data = sqlite.readData()
+    for item in items_data:
+        if item[1]==todo_id:
+            new_check = 1 - item[2]
+            sqlite.updateChecked(item[0],item[1],new_check)
             break
     return redirect(url_for('home'))    
 
 @app.route("/delete/<int:todo_id>",methods = ['POST'])
 def delete(todo_id):
-    for item in listed_items:
-        if item['id']==todo_id:
-            listed_items.remove(item)
+    items_data = sqlite.readData()
+    for item in items_data:
+        if item[1]==todo_id:
+            sqlite.deleteData(todo_id)
             break
     return redirect(url_for('home'))
 
